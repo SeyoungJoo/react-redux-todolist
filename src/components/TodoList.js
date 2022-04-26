@@ -17,11 +17,6 @@ const TodoList = ({ counter, handleCounter }) => {
     return n;
   }, []);
 
-  // let expensiveComputation = 0;
-  // for (let i = 0; i < 900000000; i++) {
-  //   expensiveComputation++;
-  // }
-
   console.log("This is Child Component !!!");
 
   const inputRef = useRef(null);
