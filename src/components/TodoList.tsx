@@ -1,15 +1,25 @@
 import { useState, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addTodo } from "redux/action";
+import Todo from "./TodoItem";
+
+interface RootState {
+  todos: [{ id: number; title: string }];
+}
 
 const TodoList = () => {
+  const todos = useSelector((state: RootState) => state.todos);
+  const dispatch = useDispatch();
   const [todoInput, setTodoInput] = useState<string>("");
-  const [todoList, setTodoList] = useState<string[]>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleAddTask = () => {
-    setTodoList([...todoList, todoInput]);
+  //state = {todos: [{id: 1, title: 'sss', id: 2, title: 'aaa'}]}
+
+  console.log(todos);
+  const addTask = () => {
+    dispatch(addTodo({ title: todoInput }));
     setTodoInput("");
   };
-
-  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -27,19 +37,13 @@ const TodoList = () => {
           onChange={(e) => setTodoInput(e.currentTarget.value)}
           placeholder="Enter task"
         />
-        <button
-          type="submit"
-          className="button"
-          onClick={() => handleAddTask()}
-        >
+        <button type="submit" className="button" onClick={addTask}>
           Add
         </button>
       </div>
-      {todoList.map((todo, index) => (
-        <p className="todo" key={index}>
-          {todo}
-        </p>
-      ))}
+      {todos.map((todo: { title: string; id: number }, index: number) => {
+        return <Todo key={index} todo={todo} />;
+      })}
     </div>
   );
 };
